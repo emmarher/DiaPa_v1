@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "367204670853",
+    "firebase_url": "https://diapa-v1.firebaseio.com",
+    "project_id": "diapa-v1",
+    "storage_bucket": "diapa-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367204670853:android:0b4ada3782d56ddc",
+        "android_client_info": {
+          "package_name": "com.example.emmarher.diapa_v1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367204670853-i7ka0gh254ngdf3k3bg365lsauklg3ue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA78z1OrRgoSWmMNMwPU_qbKJw80O7L3do"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
