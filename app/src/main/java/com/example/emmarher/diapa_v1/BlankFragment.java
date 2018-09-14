@@ -90,7 +90,8 @@ public class BlankFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }//prueba branch tt
+
 
     /**
      * This interface must be implemented by activities that contain this

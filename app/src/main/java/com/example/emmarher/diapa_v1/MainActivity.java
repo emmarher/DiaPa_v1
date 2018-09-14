@@ -1,6 +1,7 @@
 package com.example.emmarher.diapa_v1;
 
 import android.app.Person;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     TextView BandAccelX, BandAccelY, BandAccelZ;
     TextView BandGyroX, BandGyroY, BandGyroZ;
     TextView BandUV, BandRRInterval;
-    Button mSubmitButton;
+    Button mSubmitButton, btnAcercaDe;
     Spinner spinner;
 
     // Uso para el ejemlo de mostrar datos de Firebase DB
@@ -122,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
         lblTemperatura = findViewById(R.id.lblHumedad);
         btnEliminarListner = findViewById(R.id.btnEliminarListener);
         txtNombre = findViewById(R.id.txtNombre);
+
+        // ************* Button acerca de ******************
+        btnAcercaDe =  findViewById(R.id.acercade);
+
 // <------------------- S O C K E T ----------------------->
 
 SocketThread st = new SocketThread();
@@ -160,6 +165,13 @@ SocketThread st = new SocketThread();
         };
 
         mDatabase.addValueEventListener(eventListener);
+        // ********** BTN ACERCA DE *************************
+        btnAcercaDe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),AcercaDe.class);
+            }
+        });
 //<----------------- B T N  -  E L I M I N A R  -  L I S T E N E R ----------------
         btnEliminarListner.setOnClickListener(new View.OnClickListener() {
             @Override
