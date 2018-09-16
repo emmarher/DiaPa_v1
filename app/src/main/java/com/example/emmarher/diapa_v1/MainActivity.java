@@ -196,7 +196,7 @@ SocketThread st = new SocketThread();
         //NOTE: The BandClient.Connect method must be called from background thread. An exception
         //will be thrown if called from the UI thread
 
-        bandConsent(); //new SDK requires consent to read from HR sensor
+        bandConsent(); //new SDK requires consent to read from HR sensor... hace esto para que en cuanto arranca la actividad, de permisos en automatico... supongo
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
