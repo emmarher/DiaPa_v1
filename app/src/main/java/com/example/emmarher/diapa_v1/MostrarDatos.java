@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MostrarDatos extends AppCompatActivity {
-    private TextView et_Ax_x, et_Ax_y, et_Ax_z, et_Pulso, et_Nombre, et_Mail, et_Edad, et_Genero, et_Temp;
+    private TextView et_Ax_x, et_Ax_y, et_Ax_z, et_Pulso, et_Nombre, et_Mail, et_Edad, et_Genero, et_Temp, et_Gax_x, et_Gax_y, et_Gax_z;
     private String dni;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,9 @@ public class MostrarDatos extends AppCompatActivity {
         et_Ax_x = findViewById(R.id.m_ax_x);
         et_Ax_y = findViewById(R.id.m_ax_y);
         et_Ax_z = findViewById(R.id.m_ax_z);
+        et_Gax_x = findViewById(R.id.gy_ax_x);
+        et_Gax_y = findViewById(R.id.gy_ax_y);
+        et_Gax_z = findViewById(R.id.gy_ax_z);
         et_Pulso = findViewById(R.id.et_Pulso);
         et_Temp = findViewById(R.id.et_Temp);
 
@@ -35,19 +38,22 @@ public class MostrarDatos extends AppCompatActivity {
 
         Cursor fila = bd.rawQuery(
 
-                "select nombre, mail,edad, genero, acelx, acely, acelz, pulso, tempe from usuario where dni=" + dni, null);
+                "select nombre, mail,edad, genero, acelx, acely, acelz, gyro_x, gyro_y, gyro_z,pulso, tempe from usuario where dni=" + dni, null);
 
         if (fila.moveToFirst()) {
 
-            et_Nombre.setText(fila.getString(0));
-            et_Mail.setText(fila.getString(1));
-            et_Edad.setText(fila.getString(2));
-            et_Genero.setText(fila.getString(3));
-            et_Ax_x.setText("X: "+fila.getString(4));
-            et_Ax_y.setText("Y: "+fila.getString(5));
-            et_Ax_z.setText("Z: "+fila.getString(6));
-            et_Pulso.setText(fila.getString(7));
-            et_Temp.setText(fila.getString(8));
+            et_Nombre.setText("Nombre: "+fila.getString(0));
+            et_Mail.setText("E-mail: "+fila.getString(1));
+            et_Edad.setText("Edad: "+fila.getString(2));
+            et_Genero.setText("Genero: "+fila.getString(3));
+            et_Ax_x.setText("   X\n"+fila.getString(4));
+            et_Ax_y.setText("   Y\n"+fila.getString(5));
+            et_Ax_z.setText("   Z\n"+fila.getString(6));
+            et_Gax_x.setText("   X\n"+fila.getString(7));
+            et_Gax_y.setText("   Y\n"+fila.getString(8));
+            et_Gax_z.setText("   Z\n"+fila.getString(9));
+            et_Pulso.setText(fila.getString(10));
+            et_Temp.setText(fila.getString(11));
             //monitor.setText(array);
 
         } else

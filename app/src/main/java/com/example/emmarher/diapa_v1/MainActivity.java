@@ -4,6 +4,7 @@ import android.app.Person;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +59,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int MILISEGUNDOS = 5000;
+
     BandInfo[] pairedBands;
     BandClient bandClient;
     TextView BandVersion;
@@ -101,16 +104,22 @@ public class MainActivity extends AppCompatActivity {
     //myRef.setValue("Hello, World!");
     //mensajeRef.setValue("cambio");
 
-    // <----------- ARRAY LIST PARA EJES/AXIS-------->
-    public ArrayList ax_x = new ArrayList();
-    public ArrayList ax_y = new ArrayList();
-    public ArrayList ax_z = new ArrayList();
-    public ArrayList Puls = new ArrayList();
-    public ArrayList Temp = new ArrayList();
+    // <----------- ARRAY LIST PARA DESPUES GUARDAR EN BD-------->
+    public ArrayList ax_x = new ArrayList();// ACC X
+    public ArrayList ax_y = new ArrayList();// ACC Y
+    public ArrayList ax_z = new ArrayList();// ACC Z
+    public ArrayList Puls = new ArrayList();// PULSO
+    public ArrayList Temp = new ArrayList();//TEMPERATURA
+    public ArrayList gax_x = new ArrayList();// GYROSCOPIO X
+    public ArrayList gax_y = new ArrayList();// GYRO Y
+    public ArrayList gax_z = new ArrayList();// GYRO Z
+
+    //<----------------- VARIABLE TIPO STRING PARA ACOMODAR VALORES DE EJES------
+    String acx,acy,acz,gyx,gyy,gyz = "";
 
 
-    String nombre,dni,mail, genero;
-    Integer edad;
+    String nombre,dni,mail, genero,edad;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         dni = getIntent().getExtras().getString("dni");
         mail = getIntent().getExtras().getString("email");
         genero = getIntent().getExtras().getString("genero");
-        edad = getIntent().getExtras().getInt("edad");
+        edad = getIntent().getExtras().getString("edad");
 
 // <------------------- S O C K E T ----------------------->
 
@@ -188,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        esperarYCerrar(MILISEGUNDOS);
+
         mDatabase.addValueEventListener(eventListener);
         // ********** BTN ACERCA DE *************************
         final MyDB admin = new MyDB(this, "administracion", null,1);
@@ -198,16 +209,70 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SQLiteDatabase bd = admin.getWritableDatabase();
                 ContentValues registro = new ContentValues(); // hacemos que en el objeto registro se guarden los valores con pt
+                // *********** ordenar vector del eje x del acelerometro
+                for (int i=0; i<ax_x.size();i++ ){
+                    if (i==0){
+                        acx= (String) ax_x.get(i);
+                    }
+                    else
+                    {acx = acx+"\n"+ax_x.get(i);}
+
+                }
+                for (int i=0; i<ax_y.size();i++ ){
+                    if (i==0){
+                        acy= (String) ax_y.get(i);
+                    }
+                    else
+                    {acy = acy+"\n"+ax_y.get(i);}
+
+                }
+
+                for (int i=0; i<ax_z.size();i++ ){
+                    if (i==0){
+                        acz= (String) ax_z.get(i);
+                    }
+                    else
+                    {acz = acz+"\n"+ax_z.get(i);}
+
+                }//********* gyroscopio****************
+                for (int i=0; i<gax_x.size();i++ ){
+                    if (i==0){
+                        gyx= (String) gax_x.get(i);
+                    }
+                    else
+                    {gyx = gyx+"\n"+gax_x.get(i);}
+
+                }
+                for (int i=0; i<gax_y.size();i++ ){
+                    if (i==0){
+                        gyy= (String) gax_y.get(i);
+                    }
+                    else
+                    {gyy = gyy + "\n" + gax_y.get(i);}
+                }
+                for (int i=0; i<gax_z.size();i++ ){
+                    if (i==0){
+                        gyz= (String) gax_z.get(i);
+                    }
+                    else
+                    {gyz = gyz+"\n"+gax_z.get(i);}
+
+                }
+
                 registro.put("dni",dni);
                 registro.put("nombre",nombre);
                 registro.put("mail",mail);
                 registro.put("edad",edad);
                 registro.put("genero",genero);
-                registro.put("acelx", String.valueOf(ax_x));
-                registro.put("acely", String.valueOf(ax_y));
-                registro.put("acelz", String.valueOf(ax_z));
-                registro.put("pulso", String.valueOf(Puls));
-                registro.put("tempe", String.valueOf(Temp));
+                //registro.put("acelx", String.valueOf(ax_x)); // De esta forma se guarda directamente el array
+                registro.put("acelx", acx);
+                registro.put("acely", acy);
+                registro.put("acelz", acz); //gyro_x text, gyro_y text, gyro_z text,
+                registro.put("gyro_x", gyx);
+                registro.put("gyro_y", gyy);
+                registro.put("gyro_z", gyz);
+                registro.put("pulso", String.valueOf(Puls)); // Sacar promedio???
+                registro.put("tempe", String.valueOf(Temp));// Sacar promedio??
 
                 //db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
 
@@ -400,18 +465,21 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 BandGyroX.setText("X: " + GyrX );
+                                gax_x.add(GyrX);
                             }
                         });
                         BandGyroY.post(new Runnable() {
                             @Override
                             public void run() {
                                 BandGyroY.setText("Y: " + GyrY );
+                                gax_y.add(GyrY);
                             }
                         });
                         BandGyroZ.post(new Runnable() {
                             @Override
                             public void run() {
                                 BandGyroZ.setText("Z: " + GyrZ );
+                                gax_z.add(GyrZ);
                             }
                         });
                     }
@@ -450,13 +518,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 try{
-                    bandClient.getSensorManager().registerAccelerometerEventListener(accelerometerEventListener, SampleRate.MS128);
+                    bandClient.getSensorManager().registerAccelerometerEventListener(accelerometerEventListener, SampleRate.MS16);// a menor numero de rate, mas muestras
                 }catch(BandException ex) {
                     //Catch
                 }
 
                 try{
-                    bandClient.getSensorManager().registerGyroscopeEventListener(gyroscopeEventListener, SampleRate.MS128);
+                    bandClient.getSensorManager().registerGyroscopeEventListener(gyroscopeEventListener, SampleRate.MS16);
                 }catch(BandException ex){
                     //Catch
                 }
@@ -559,4 +627,109 @@ public class MainActivity extends AppCompatActivity {
       //  e.printStackTrace();
     //}
 //}
+
+
+    /**
+     * Espera y cierra la aplicación tras los milisegundos indicados
+     * @param milisegundos
+     */
+    public void esperarYCerrar(int milisegundos) {
+        //Handler handler = new Handler();
+        //handler.postDelayed(new Runnable()
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                guardar_y_regresar_al_main();
+            }
+        }, milisegundos);
+    }
+
+    /**
+     * Finaliza la aplicación
+     */
+    public void guardar_y_regresar_al_main() {
+        final MyDB admin = new MyDB(this, "administracion", null, 1);
+
+        SQLiteDatabase bd = admin.getWritableDatabase();
+        ContentValues registro = new ContentValues(); // hacemos que en el objeto registro se guarden los valores con pt
+        // *********** ordenar vector del eje x del acelerometro
+        for (int i=0; i<ax_x.size();i++ ){
+            if (i==0){
+                acx= (String) ax_x.get(i);
+            }
+            else
+            {acx = acx+"\n"+ax_x.get(i);}
+
+        }
+        for (int i=0; i<ax_y.size();i++ ){
+            if (i==0){
+                acy= (String) ax_y.get(i);
+            }
+            else
+            {acy = acy+"\n"+ax_y.get(i);}
+
+        }
+
+        for (int i=0; i<ax_z.size();i++ ){
+            if (i==0){
+                acz= (String) ax_z.get(i);
+            }
+            else
+            {acz = acz+"\n"+ax_z.get(i);}
+
+        }//********* gyroscopio****************
+        for (int i=0; i<gax_x.size();i++ ){
+            if (i==0){
+                gyx= (String) gax_x.get(i);
+            }
+            else
+            {gyx = gyx+"\n"+gax_x.get(i);}
+
+        }
+        for (int i=0; i<gax_y.size();i++ ){
+            if (i==0){
+                gyy= (String) gax_y.get(i);
+            }
+            else
+            {gyy = gyy + "\n" + gax_y.get(i);}
+        }
+        for (int i=0; i<gax_z.size();i++ ){
+            if (i==0){
+                gyz= (String) gax_z.get(i);
+            }
+            else
+            {gyz = gyz+"\n"+gax_z.get(i);}
+
+        }
+
+        registro.put("dni",dni);
+        registro.put("nombre",nombre);
+        registro.put("mail",mail);
+        registro.put("edad",edad);
+        registro.put("genero",genero);
+        //registro.put("acelx", String.valueOf(ax_x)); // De esta forma se guarda directamente el array
+        registro.put("acelx", acx);
+        registro.put("acely", acy);
+        registro.put("acelz", acz); //gyro_x text, gyro_y text, gyro_z text,
+        registro.put("gyro_x", gyx);
+        registro.put("gyro_y", gyy);
+        registro.put("gyro_z", gyz);
+        registro.put("pulso", String.valueOf(Puls)); // Sacar promedio???
+        registro.put("tempe", String.valueOf(Temp));// Sacar promedio??
+
+        //db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
+
+
+        // los inserto en la tabla, que antes guardamos en el objeto registro, y lo pasamos con ibsert a la bd
+        bd.insert("usuario",null,registro);
+        bd.close();
+        //ponemos los campos en vacío
+
+
+        Intent intent = new Intent(MainActivity.this,AcercaDe.class);
+        //startActivityForResult(intent, 0);
+        startActivity(intent);
+
+    }
 }

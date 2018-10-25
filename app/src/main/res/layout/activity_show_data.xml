@@ -68,10 +68,12 @@
 
                                     <TextView
                                         android:id="@+id/m_ax_x"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="1dp"
                                         android:text="Axis X"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
                                         android:textSize="20sp" />
                                 </ScrollView>
 
@@ -89,10 +91,12 @@
 
                                 <TextView
                                     android:id="@+id/m_ax_y"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="1dp"
                                     android:text="Axis Y"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
                                     android:textSize="20sp" />
 
                             </LinearLayout>
@@ -107,9 +111,11 @@
 
                                 <TextView
                                     android:id="@+id/m_ax_z"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="1dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
                                     android:text="Axis Z"
                                     android:textSize="20sp" />
 

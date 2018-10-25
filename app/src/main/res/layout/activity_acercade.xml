@@ -56,7 +56,7 @@ tools:context=".AcercaDe">
 
 
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@ tools:context=".AcercaDe">
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent" />-->
 
         </LinearLayout>
 
@@ -87,7 +87,7 @@ tools:context=".AcercaDe">
                 android:layout_column="0"
                 android:gravity="center_horizontal"
                 android:paddingTop="15dp"
-                android:text="Nombre (Opcional)"
+                android:text="Nombre / Nickname"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -147,13 +147,38 @@ tools:context=".AcercaDe">
                 android:layout_height="match_parent"
                 android:id="@+id/et_dni"/>
 
-            <Button
-                android:id="@+id/btn_mostrar_datos"
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:text="Mostrar datos"
-                android:background="@drawable/boton_redondo"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_mostrar_datos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Mostrar datos"
+                    android:layout_column="1"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/boton_redondo"/>
+                <Button
+                    android:id="@+id/btn_Main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#f18868"
+                    android:drawableLeft="@drawable/ic_account_plus"
+                    android:drawablePadding="8dp"
+                    android:layout_centerVertical="true"
+                    android:text="Regristrar" />
+
+            </GridLayout>
+
+
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -164,12 +189,7 @@ tools:context=".AcercaDe">
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:text="Registrar y mostrar transmision de sensores para guardar"/>
-            <Button
-                android:id="@+id/btn_Main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Regristrar" />
+
 
 
 
