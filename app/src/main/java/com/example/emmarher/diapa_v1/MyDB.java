@@ -16,6 +16,12 @@ public class MyDB extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "Sujeto";
     public static final String COLUMN_ID = "SujetoID";
     public static final String COLUMN_NAME = "SujetoName";
+    public static final String COLUMN_MAIL = "SujetoMail";
+    public static final String COLUMN_EDAD = "SujetoEdad";
+    public static final String COLUMN_GEN = "SujetoGen";
+    public static final String COLUMN_ACCX = "SujetoAccX";
+    public static final String COLUMN_ACCY = "SujetoAccY";
+    public static final String COLUMN_ACCZ = "SujetoAccZ";
     //initialize the database
     public MyDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);// Son los elementos de la linea de arriba
@@ -23,9 +29,12 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
 
     public void onCreate(SQLiteDatabase db) {//Creamos la tabla
-        String CREATE_TABLE = "CREATE TABLE" + TABLE_NAME + "(" + COLUMN_ID +
-                "INTEGER PRIMARYKEY," + COLUMN_NAME + "TEXT )";
+       /* String CREATE_TABLE = "CREATE TABLE" + TABLE_NAME + "(" + COLUMN_ID +
+                " INTEGER PRIMARYKEY ," + COLUMN_NAME + " TEXT, "+COLUMN_MAIL + " TEXT, "+ COLUMN_EDAD + " INTEGER )";
         db.execSQL(CREATE_TABLE);
+       */ //aquí creamos la tabla de usuario (dni, nombre, ciudad, numero)
+       db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int version1, int version2) {

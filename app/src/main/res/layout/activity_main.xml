@@ -359,21 +359,13 @@
                     android:background="@drawable/boton_redondo"
                     android:text="Modificar" />
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"></Spinner>
 
-                <EditText
-                    android:id="@+id/txtNombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/acercade"
-                    android:text="Acerca de"/>
+                    android:text="Back"/>
 
             </LinearLayout>
 

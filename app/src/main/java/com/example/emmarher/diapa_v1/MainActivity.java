@@ -1,7 +1,9 @@
 package com.example.emmarher.diapa_v1;
 
 import android.app.Person;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.firebase.database.DatabaseReference;
@@ -51,6 +54,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,21 +85,33 @@ public class MainActivity extends AppCompatActivity {
 // [END declare_database_ref]
 
     //DataSnapshot dataSnapshot = new DataSnapshot();
-    // Write a message to the database
+    // Write a message to the databasez
     //FirebaseDatabase database = FirebaseDatabase.getInstance();
     //DatabaseReference myRef = database.getReference("message");
    // DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
    // DatabaseReference mensajeRef = ref.child("Mensajito");
 
 // S O C K E T .... como cree la clase en un archivo aparte no son necesarios aqui
-    private Socket socket;
-    private PrintStream out;
-    private Boolean connected;
+    //private Socket socket;
+    //private PrintStream out;
+    //private Boolean connected;
 
 
 
     //myRef.setValue("Hello, World!");
     //mensajeRef.setValue("cambio");
+
+    // <----------- ARRAY LIST PARA EJES/AXIS-------->
+    public ArrayList ax_x = new ArrayList();
+    public ArrayList ax_y = new ArrayList();
+    public ArrayList ax_z = new ArrayList();
+    public ArrayList Puls = new ArrayList();
+    public ArrayList Temp = new ArrayList();
+
+
+    String nombre,dni,mail, genero;
+    Integer edad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.diagpark);// ScreenSplash
@@ -122,19 +138,27 @@ public class MainActivity extends AppCompatActivity {
         lblHumedad = findViewById(R.id.lblHumedad);
         lblTemperatura = findViewById(R.id.lblHumedad);
         btnEliminarListner = findViewById(R.id.btnEliminarListener);
-        txtNombre = findViewById(R.id.txtNombre);
+      //  txtNombre = findViewById(R.id.txtNombre);
 
         // ************* Button acerca de ******************
         btnAcercaDe =  findViewById(R.id.acercade);
 
+        // <------------------- RECIBIR PARAMETROS DE OTRO ACTIVITY ----------------------->
+
+        nombre = getIntent().getExtras().getString("usuario");
+        dni = getIntent().getExtras().getString("dni");
+        mail = getIntent().getExtras().getString("email");
+        genero = getIntent().getExtras().getString("genero");
+        edad = getIntent().getExtras().getInt("edad");
+
 // <------------------- S O C K E T ----------------------->
 
-SocketThread st = new SocketThread();
+//SocketThread st = new SocketThread();
 
         //SPINNER  <----------------------->
-        Spinner spinner = findViewById(R.id.spinner);
-        String[] genres = {"Hombre", "Mujer","Indefinido","LGTB"};
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genres));
+//        Spinner spinner = findViewById(R.id.spinner);
+  //      String[] genres = {"Hombre", "Mujer","Otro"};
+    //    spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genres));
 
 
 
@@ -166,12 +190,41 @@ SocketThread st = new SocketThread();
 
         mDatabase.addValueEventListener(eventListener);
         // ********** BTN ACERCA DE *************************
+        final MyDB admin = new MyDB(this, "administracion", null,1);
+
         btnAcercaDe.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(),AcercaDe.class);
+                SQLiteDatabase bd = admin.getWritableDatabase();
+                ContentValues registro = new ContentValues(); // hacemos que en el objeto registro se guarden los valores con pt
+                registro.put("dni",dni);
+                registro.put("nombre",nombre);
+                registro.put("mail",mail);
+                registro.put("edad",edad);
+                registro.put("genero",genero);
+                registro.put("acelx", String.valueOf(ax_x));
+                registro.put("acely", String.valueOf(ax_y));
+                registro.put("acelz", String.valueOf(ax_z));
+                registro.put("pulso", String.valueOf(Puls));
+                registro.put("tempe", String.valueOf(Temp));
+
+                //db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
+
+
+                // los inserto en la tabla, que antes guardamos en el objeto registro, y lo pasamos con ibsert a la bd
+                bd.insert("usuario",null,registro);
+                bd.close();
+                //ponemos los campos en vacío
+
+
+                Intent intent = new Intent(MainActivity.this,AcercaDe.class);
+                //startActivityForResult(intent, 0);
+                startActivity(intent);
             }
         });
+
+
 //<----------------- B T N  -  E L I M I N A R  -  L I S T E N E R ----------------
         btnEliminarListner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +250,6 @@ SocketThread st = new SocketThread();
         //will be thrown if called from the UI thread
 
         bandConsent(); //new SDK requires consent to read from HR sensor... hace esto para que en cuanto arranca la actividad, de permisos en automatico... supongo
-
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,8 +258,7 @@ SocketThread st = new SocketThread();
         });
 
         //<------------------- Socket --------->
-        new Thread(new SocketThread()).start(); //Inicializan el hilo de socket.
-
+       // new Thread(new SocketThread()).start(); //Inicializan el hilo de socket.
 
     }
 // <--------------------- CONSENTIMIENTO -----> PARA EL PULSO, en automatico aceptar
@@ -238,11 +289,6 @@ SocketThread st = new SocketThread();
                 public void run() {
                     try{
                         helloMSBand();
-                        // prueba socket
-                      // if(connected == true){
-                        //   String s = String.format("{\"x\": %f, \"y\": %f, \"z\": %f}",
-                       //            event.values[0], event.values[1], event.values[2]);]
-
                     }catch (BandException e){
                         e.printStackTrace();
                     }
@@ -289,6 +335,7 @@ SocketThread st = new SocketThread();
                             @Override
                             public void run() {
                                 BandHR.setText(HR);
+                                Puls.add(HR);
                             }
                         });
                     }
@@ -302,6 +349,7 @@ SocketThread st = new SocketThread();
                             @Override
                             public void run() {
                                 BandTemp.setText(TempF);
+                                Temp.add(TempF);
                             }
                         });
                     }
@@ -314,25 +362,29 @@ SocketThread st = new SocketThread();
                         final String AccY = String.format("%.2f",bandAccelerometerEvent.getAccelerationY());
                         final String AccZ = String.format("%.2f", bandAccelerometerEvent.getAccelerationZ());
                         //socket
-                        if(connected == true){
-                              String s = String.format("{\"x\": %.2f, \"y\": %.2f, \"z\": %.2f}",
-                                        AccX, AccY, AccZ);}
+                       // if(connected == true){
+                         //     String s = String.format("{\"x\": %.2f, \"y\": %.2f, \"z\": %.2f}",
+                           //             AccX, AccY, AccZ);}
                         BandAccelX.post(new Runnable() {
                             @Override
                             public void run() {
                                 BandAccelX.setText("X: " + AccX);
+                                ax_x.add(AccX);
+
                             }
                         });
                         BandAccelY.post(new Runnable() {
                             @Override
                             public void run() {
                                 BandAccelY.setText("Y: " + AccY );
+                                ax_y.add(AccY);
                             }
                         });
                         BandAccelZ.post(new Runnable() {
                             @Override
                             public void run() {
                                 BandAccelZ.setText("Z: " + AccZ);
+                                ax_z.add(AccZ);
                             }
                         });
                     }
@@ -498,13 +550,13 @@ SocketThread st = new SocketThread();
     private void submitPost(){
 
     }*/
-private void ejecutaCliente(){
-    try{
-        socket = new Socket ("mi direccion de ip", 5001); // Inicializa el constructor del socket
-        out = new PrintStream(socket.getOutputStream(),true);
-        connected = true;
-    } catch(java.io.IOException e){
-        e.printStackTrace();
-    }
-}
+//private void ejecutaCliente(){
+  //  try{
+    //    socket = new Socket ("mi direccion de ip", 5001); // Inicializa el constructor del socket
+      //  out = new PrintStream(socket.getOutputStream(),true);
+       // connected = true;
+    //} catch(java.io.IOException e){
+      //  e.printStackTrace();
+    //}
+//}
 }
