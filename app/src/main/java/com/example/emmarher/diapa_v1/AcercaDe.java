@@ -19,7 +19,7 @@ public class AcercaDe  extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acercade);
+        setContentView(R.layout.registro);
 
         //SPINNER  <----------------------->
          spinner_gen = findViewById(R.id.spinner_genero);

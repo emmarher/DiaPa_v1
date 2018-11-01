@@ -17,18 +17,17 @@
         <activity android:name=".MainActivity"
             android:theme="@style/diagpark">
             <intent-filter>
+                <!-- Es el primer activity al ejecutarse la aplicacion-->
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
 
-                <action android:name="android.intent.action.ACERCADE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".AcercaDe"
+        <activity android:name=".Record_sensor"
             android:label="DIAPARK ">
             <intent-filter>
-                <!-- Es el primer activity al ejecutarse la aplicacion-->
-               <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.RECORD" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".MostrarDatos"

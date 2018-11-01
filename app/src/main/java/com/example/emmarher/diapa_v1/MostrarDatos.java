@@ -41,7 +41,7 @@ public class MostrarDatos extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "De vuelta al menu", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent(MostrarDatos.this,AcercaDe.class);
+                Intent intent = new Intent(MostrarDatos.this,MainActivity.class);
                 //startActivityForResult(intent, 0);
                 startActivity(intent);
 
