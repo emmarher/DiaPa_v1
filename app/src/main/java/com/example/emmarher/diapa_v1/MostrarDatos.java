@@ -1,9 +1,12 @@
 package com.example.emmarher.diapa_v1;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +35,19 @@ public class MostrarDatos extends AppCompatActivity {
         et_Temp = findViewById(R.id.et_Temp);
 
         dni = getIntent().getExtras().getString("dni");
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "De vuelta al menu", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Intent intent = new Intent(MostrarDatos.this,AcercaDe.class);
+                //startActivityForResult(intent, 0);
+                startActivity(intent);
+
+            }
+        });
+
          MyDB admin = new MyDB(this, "administracion", null,1);
 
         SQLiteDatabase bd = admin.getWritableDatabase();

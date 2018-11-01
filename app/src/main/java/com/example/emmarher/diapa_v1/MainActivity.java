@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -167,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
         //SPINNER  <----------------------->
 //        Spinner spinner = findViewById(R.id.spinner);
   //      String[] genres = {"Hombre", "Mujer","Otro"};
-    //    spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genres));
+        final MyDB admin = new MyDB(this, "administracion", null,1);
 
-
+        //    spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genres));
 
         // <------------------- F I R E B A S E  -  I N I C I A L I Z A R---------------------------->
         mDatabase = FirebaseDatabase.getInstance().getReference().child("prediccion-hoy");
@@ -201,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase.addValueEventListener(eventListener);
         // ********** BTN ACERCA DE *************************
-        final MyDB admin = new MyDB(this, "administracion", null,1);
+      //  final MyDB admin = new MyDB(this, "administracion", null,1); // ya se declaró arriba
 
         btnAcercaDe.setOnClickListener(new View.OnClickListener() {
 
