@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -139,14 +140,16 @@ public class Record_sensor extends AppCompatActivity {
         mail = getIntent().getExtras().getString("email");
         genero = getIntent().getExtras().getString("genero");
         edad = getIntent().getExtras().getString("edad");
-
+        Toast.makeText(this, "Datos del usuario cargados", Toast.LENGTH_SHORT).show();
         final MyDB admin = new MyDB(this, "administracion", null,1);
 
              // <------------------- F I R E B A S E  -  I N I C I A L I Z A R---------------------------->
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("prediccion-hoy");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // PARA DESCARGAR DATOS
                 //Opción 1
                 lblCielo.setText(dataSnapshot.child("cielo").getValue().toString());
                 lblTemperatura.setText(dataSnapshot.child("temperatura").getValue().toString());
@@ -157,6 +160,8 @@ public class Record_sensor extends AppCompatActivity {
                 lblCielo.setText(pred.getCielo());
                 lblTemperatura.setText(pred.getTemperatura() + "ºC");
                 lblHumedad.setText(pred.getHumedad() + "%");*/
+
+               // SUBIR DATOS
 
                 Log.e(TAGLOG, "onDataChange:" + dataSnapshot.getValue().toString());
             }

@@ -401,19 +401,11 @@
                         android:textSize="15dp"
                         android:id="@+id/et_mail"/>
 
-
-
             </LinearLayout>
-
-
 
             </GridLayout>
 
-
-
-
         </ScrollView>
-
 
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton

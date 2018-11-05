@@ -80,6 +80,7 @@ public class MostrarDatos extends AppCompatActivity {
 
         bd.close();
 
+/*
         // ***************BOTON PARA REGRESAR AL menu *******************************
         Button btn_main =  findViewById(R.id.btn_main);
         btn_main.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,7 @@ public class MostrarDatos extends AppCompatActivity {
                 startActivity(intent2);
             }
         });
+*/
 
 
 
