@@ -1,4 +1,5 @@
 package com.example.emmarher.diapa_v1;
+
 public class Sujeto {
     //Fields
     private int sujetoID;

@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
@@ -144,7 +145,8 @@ public class Record_sensor extends AppCompatActivity {
         final MyDB admin = new MyDB(this, "administracion", null,1);
 
              // <------------------- F I R E B A S E  -  I N I C I A L I Z A R---------------------------->
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("users");// opcion 1 para hacer referencia al child
+        mDatabase = FirebaseDatabase.getInstance().getReference();//con esta opción se especifica despues el child
         eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -701,7 +703,8 @@ public class Record_sensor extends AppCompatActivity {
         bd.close();
         //ponemos los campos en vacío
 
-
+        User addUser = new User(dni,nombre,mail,edad,genero,acx,acy,acz,gyx,gyy,gyz,String.valueOf(Puls),String.valueOf(Temp));
+        mDatabase.child("users").push().setValue(addUser);
         Intent intent = new Intent(Record_sensor.this,MainActivity.class);
         //startActivityForResult(intent, 0);
         startActivity(intent);
