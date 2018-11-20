@@ -6,6 +6,7 @@ public class User {
     public String mail;
     public String edad;
     public String genero;
+    public String etapa;
     public String acx;
     public String acy;
     public String acz;
@@ -19,12 +20,13 @@ public class User {
         //Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String dni, String nombre, String mail, String edad, String genero, String acx, String acy, String acz, String gyx, String gyy, String gyz, String pulso, String temp){
+    public User(String dni, String nombre, String mail, String edad, String genero, String etapa, String acx, String acy, String acz, String gyx, String gyy, String gyz, String pulso, String temp){
         this.dni = dni;
         this.mail = mail;
         this.nombre=nombre;
         this.edad=edad;
         this.genero=genero;
+        this.etapa=etapa;
         this.acx=acx;
         this.acy=acy;
         this.acz=acz;
@@ -54,6 +56,10 @@ public class User {
     public String getGenero() { return genero; }
 
     public void setGenero(String genero) {this.genero = genero;}
+
+    public String getEtapa() { return etapa; }
+
+    public void setEtapa(String etapa) { this.etapa = etapa; }
 
     public String getAcx() { return acx; }
 

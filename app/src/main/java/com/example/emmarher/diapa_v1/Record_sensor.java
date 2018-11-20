@@ -100,7 +100,9 @@ public class Record_sensor extends AppCompatActivity {
 
     //<----------------- VARIABLE TIPO STRING PARA ACOMODAR VALORES DE EJES------
     String acx,acy,acz,gyx,gyy,gyz = "";
-    String nombre,dni,mail, genero,edad;
+    String nombre,dni,mail, genero,edad, et_park;
+    double pulso=0, temperatura=0; // para sumar y obtener despues la media
+    double med_pulso=0, med_temp=0;
 
 
     @Override
@@ -141,6 +143,7 @@ public class Record_sensor extends AppCompatActivity {
         mail = getIntent().getExtras().getString("email");
         genero = getIntent().getExtras().getString("genero");
         edad = getIntent().getExtras().getString("edad");
+        et_park = getIntent().getExtras().getString("etapa");
         Toast.makeText(this, "Datos del usuario cargados", Toast.LENGTH_SHORT).show();
         final MyDB admin = new MyDB(this, "administracion", null,1);
 
@@ -153,9 +156,9 @@ public class Record_sensor extends AppCompatActivity {
 
                 // PARA DESCARGAR DATOS
                 //Opción 1
-                lblCielo.setText(dataSnapshot.child("cielo").getValue().toString());
-                lblTemperatura.setText(dataSnapshot.child("temperatura").getValue().toString());
-                lblHumedad.setText(dataSnapshot.child("humedad").getValue().toString());
+//                lblCielo.setText(dataSnapshot.child("cielo").getValue().toString());
+  //              lblTemperatura.setText(dataSnapshot.child("temperatura").getValue().toString());
+    //            lblHumedad.setText(dataSnapshot.child("humedad").getValue().toString());
 
                 //Opcion 2
                /* Prediccion pred = dataSnapshot.getValue(Prediccion.class);
@@ -165,7 +168,7 @@ public class Record_sensor extends AppCompatActivity {
 
                // SUBIR DATOS
 
-                Log.e(TAGLOG, "onDataChange:" + dataSnapshot.getValue().toString());
+                // Log.e(TAGLOG, "onDataChange:" + dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -183,89 +186,14 @@ public class Record_sensor extends AppCompatActivity {
         //  final MyDB admin = new MyDB(this, "administracion", null,1); // ya se declaró arriba
 
         btnAcercaDe.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 SQLiteDatabase bd = admin.getWritableDatabase();
                 ContentValues registro = new ContentValues(); // hacemos que en el objeto registro se guarden los valores con pt
                 // *********** ordenar vector del eje x del acelerometro
-                for (int i=0; i<ax_x.size();i++ ){
-                    if (i==0){
-                        acx= (String) ax_x.get(i);
-                    }
-                    else
-                    {acx = acx+"\n"+ax_x.get(i);}
 
-                }
-                for (int i=0; i<ax_y.size();i++ ){
-                    if (i==0){
-                        acy= (String) ax_y.get(i);
-                    }
-                    else
-                    {acy = acy+"\n"+ax_y.get(i);}
-
-                }
-
-                for (int i=0; i<ax_z.size();i++ ){
-                    if (i==0){
-                        acz= (String) ax_z.get(i);
-                    }
-                    else
-                    {acz = acz+"\n"+ax_z.get(i);}
-
-                }//********* gyroscopio****************
-                for (int i=0; i<gax_x.size();i++ ){
-                    if (i==0){
-                        gyx= (String) gax_x.get(i);
-                    }
-                    else
-                    {gyx = gyx+"\n"+gax_x.get(i);}
-
-                }
-                for (int i=0; i<gax_y.size();i++ ){
-                    if (i==0){
-                        gyy= (String) gax_y.get(i);
-                    }
-                    else
-                    {gyy = gyy + "\n" + gax_y.get(i);}
-                }
-                for (int i=0; i<gax_z.size();i++ ){
-                    if (i==0){
-                        gyz= (String) gax_z.get(i);
-                    }
-                    else
-                    {gyz = gyz+"\n"+gax_z.get(i);}
-
-                }
-
-                registro.put("dni",dni);
-                registro.put("nombre",nombre);
-                registro.put("mail",mail);
-                registro.put("edad",edad);
-                registro.put("genero",genero);
-                //registro.put("acelx", String.valueOf(ax_x)); // De esta forma se guarda directamente el array
-                registro.put("acelx", acx);
-                registro.put("acely", acy);
-                registro.put("acelz", acz); //gyro_x text, gyro_y text, gyro_z text,
-                registro.put("gyro_x", gyx);
-                registro.put("gyro_y", gyy);
-                registro.put("gyro_z", gyz);
-                registro.put("pulso", String.valueOf(Puls)); // Sacar promedio???
-                registro.put("tempe", String.valueOf(Temp));// Sacar promedio??
-
-                //db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
-
-                // los inserto en la tabla, que antes guardamos en el objeto registro, y lo pasamos con ibsert a la bd
-                bd.insert("usuario",null,registro);
-                bd.close();
-                //ponemos los campos en vacío
-
-                Intent intent = new Intent(Record_sensor.this,AcercaDe.class);
-                //startActivityForResult(intent, 0);
-                startActivity(intent);
             }
         });
-
 
 //<----------------- B T N  -  E L I M I N A R  -  L I S T E N E R ----------------
         btnEliminarListner.setOnClickListener(new View.OnClickListener() {
@@ -284,9 +212,6 @@ public class Record_sensor extends AppCompatActivity {
                 //person.setName(txtNombre);
             }
         });
-        // [START initialize_database_ref]
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
-// [END initialize_database_ref]
 
         //NOTE: The BandClient.Connect method must be called from background thread. An exception
         //will be thrown if called from the UI thread
@@ -298,9 +223,6 @@ public class Record_sensor extends AppCompatActivity {
                 //submitPost();
             }
         });
-
-        //<------------------- Socket --------->
-        // new Thread(new SocketThread()).start(); //Inicializan el hilo de socket.
 
     }
     // <--------------------- CONSENTIMIENTO -----> PARA EL PULSO, en automatico aceptar
@@ -595,15 +517,7 @@ public class Record_sensor extends AppCompatActivity {
     private void submitPost(){
 
     }*/
-//private void ejecutaCliente(){
-    //  try{
-    //    socket = new Socket ("mi direccion de ip", 5001); // Inicializa el constructor del socket
-    //  out = new PrintStream(socket.getOutputStream(),true);
-    // connected = true;
-    //} catch(java.io.IOException e){
-    //  e.printStackTrace();
-    //}
-//}
+
 
 
     /**
@@ -679,21 +593,35 @@ public class Record_sensor extends AppCompatActivity {
             {gyz = gyz+"\n"+gax_z.get(i);}
 
         }
+        for(int i=0; i<Puls.size();i++){
+            pulso += Double.parseDouble(Puls.get(i).toString());
+        } med_pulso=pulso/Puls.size();// Obtenemos la media
+
+        for(int i=0; i<Temp.size();i++){
+            temperatura += Double.parseDouble(Temp.get(i).toString());
+        } med_temp=temperatura/Temp.size();// Obtenemos la media
 
         registro.put("dni",dni);
         registro.put("nombre",nombre);
         registro.put("mail",mail);
         registro.put("edad",edad);
         registro.put("genero",genero);
+        registro.put("etapa",et_park);
         //registro.put("acelx", String.valueOf(ax_x)); // De esta forma se guarda directamente el array
-        registro.put("acelx", acx);
-        registro.put("acely", acy);
-        registro.put("acelz", acz); //gyro_x text, gyro_y text, gyro_z text,
-        registro.put("gyro_x", gyx);
-        registro.put("gyro_y", gyy);
-        registro.put("gyro_z", gyz);
-        registro.put("pulso", String.valueOf(Puls)); // Sacar promedio???
-        registro.put("tempe", String.valueOf(Temp));// Sacar promedio??
+       // registro.put("acelx", acx);
+        registro.put("acelx", String.valueOf(ax_x));
+        registro.put("acely", String.valueOf(ax_y));
+        registro.put("acelz", String.valueOf(ax_z));
+       // registro.put("acely", acy);
+        //registro.put("acelz", acz); //gyro_x text, gyro_y text, gyro_z text,
+       // registro.put("gyro_x", gyx);
+        //registro.put("gyro_y", gyy);
+        //registro.put("gyro_z", gyz);
+        registro.put("gyro_x", String.valueOf(gax_x));
+        registro.put("gyro_y", String.valueOf(gax_y));
+        registro.put("gyro_z", String.valueOf(gax_z));
+        registro.put("pulso", String.valueOf(Puls)); // Colocar la variable med_pulso
+        registro.put("tempe", String.valueOf(Temp));// Colocar la variable med_temp
 
         //db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, pulso integer, tempe text)");
 
@@ -703,7 +631,7 @@ public class Record_sensor extends AppCompatActivity {
         bd.close();
         //ponemos los campos en vacío
 
-        User addUser = new User(dni,nombre,mail,edad,genero,acx,acy,acz,gyx,gyy,gyz,String.valueOf(Puls),String.valueOf(Temp));
+        User addUser = new User(dni,nombre,mail,edad,genero, et_park,String.valueOf(ax_x),String.valueOf(ax_y),String.valueOf(ax_z),String.valueOf(gax_x),String.valueOf(gax_y),String.valueOf(gax_z),String.valueOf(med_pulso),String.valueOf(med_temp));
         mDatabase.child("users").push().setValue(addUser);
         Intent intent = new Intent(Record_sensor.this,MainActivity.class);
         //startActivityForResult(intent, 0);

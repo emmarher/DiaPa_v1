@@ -33,7 +33,7 @@ public class MyDB extends SQLiteOpenHelper {
                 " INTEGER PRIMARYKEY ," + COLUMN_NAME + " TEXT, "+COLUMN_MAIL + " TEXT, "+ COLUMN_EDAD + " INTEGER )";
         db.execSQL(CREATE_TABLE);
        */ //aquí creamos la tabla de usuario (dni, nombre, ciudad, numero)
-       db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, acelx text,acely text, acelz text, gyro_x text, gyro_y text, gyro_z text, pulso integer, tempe text)");
+       db.execSQL("create table usuario(dni integer primary key, nombre text, mail text, edad integer, genero text, etapa text, acelx text,acely text, acelz text, gyro_x text, gyro_y text, gyro_z text, pulso integer, tempe text)");
 
     }
     @Override

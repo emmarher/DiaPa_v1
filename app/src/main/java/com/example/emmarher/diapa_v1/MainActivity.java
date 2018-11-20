@@ -63,7 +63,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private EditText et_Dni, et_Name, et_Mail;
-    private Spinner spinner_gen, spinner_edad;
+    private Spinner spinner_gen, spinner_edad, spinner_grad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 ,"61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"
                 ,"81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100"};
         spinner_edad.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, s_edad));
+        spinner_grad = findViewById(R.id.spinner_grado);
+        String[] s_grados = {"Sano", "1","2","3","4"};
+        spinner_grad.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, s_grados));
 
         // campos de layout
         et_Dni = findViewById(R.id.et_dni);
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 String mail = et_Mail.getText().toString();
                 String genero  = spinner_gen.getSelectedItem().toString();
                 String edad =  spinner_edad.getSelectedItem().toString();
+                String etapa_park =  spinner_grad.getSelectedItem().toString();
 
 
                 Intent intent2 = new Intent (v.getContext(), Record_sensor.class);
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 intent2.putExtra("email", mail);
                 intent2.putExtra("genero",genero);
                 intent2.putExtra("edad",edad);
+                intent2.putExtra("etapa",etapa_park);
                 startActivity(intent2);
             }
         });
