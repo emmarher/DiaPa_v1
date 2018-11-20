@@ -490,7 +490,6 @@ public class Record_sensor extends AppCompatActivity {
     //      String value = dataSnapshot.getValue(String.class);
     //       Log.d(TAG, "Value is: " + value);
     // }
-
     //   @Override
     //  public void onCancelled(DatabaseError error) {
     // Failed to read value
